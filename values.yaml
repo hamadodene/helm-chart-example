@@ -1,0 +1,75 @@
+replicaCount: 1
+podAnnotations: {}
+podLabels: {}
+imagePullSecrets: []
+appName: "my-app-name"
+appVersion: "0.1.0"
+
+
+image:
+  repository: my-repository
+  pullPolicy: IfNotPresent
+  tag: ""
+
+serviceAccount:
+  create: false # Change to true if you want to use serviceAccount
+  automount: true
+  annotations: {}
+  name: "my-service-account-name"
+
+service:
+  name: "my-service-name"
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+  protocol: http
+  nodePort: ""
+
+configmap:
+  enabled: false # Change to true if you want to use configmap
+  values:
+    CONFIGMAP_VALUE_ONE: ""
+    CONFIGMAP_VALUE_TWO: ""
+
+secrets:
+  enabled: false   # Change to true if you want to use secrets
+  type: Opaque
+  values:
+    SECRETS_VALUE_ONE: ""
+    SECRETS_VALUE_TWO: ""
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.org/client-max-body-size: 0
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: prefix
+  tls: []
+  #  - secretName: helm-template-tls
+  #    hosts:
+  #      - shashwotrisal.com.np
+  #    keyFile: certs/keyfile.key
+  #    crtFile: certs/certfile.crt
+  #  - secretName: helm-template-tls-1
+  #    hosts:
+  #      - api.shashwotrisal.com.np
+  #    keyFile: certs/keyfile.key
+  #    crtFile: certs/certfile.crt
+
+# Additional volumes on the output Deployment definition.
+volumes:
+ - name: foo
+   secret:
+    secretName: mysecret
+    optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts:
+ - name: foo
+   mountPath: "/etc/foo"
+   readOnly: true
