@@ -23,7 +23,7 @@ service:
   port: 80
   targetPort: 80
   protocol: http
-  nodePort: ""
+  nodePort: 8080
 
 configmap:
   enabled: true # Change to true if you want to use configmap
