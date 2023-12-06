@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ .Values.appName }}
   labels:
-    {{ .Values.podLabels | nindent 4 }}
+    {{- include "helm-chart.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
