@@ -1,0 +1,70 @@
+replicaCount: 1
+podAnnotations: {}
+imagePullSecrets: []
+appName: "hamatest-helloworld"
+appVersion: "0.1.0"
+
+podLabels: 
+  app: nginx
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+serviceAccount:
+  create: false # Change to true if you want to use serviceAccount
+  automount: true
+  annotations: {}
+  name: "my-service-account-name"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+  protocol: http
+  nodePort: ""
+
+configmap:
+  enabled: true # Change to true if you want to use configmap
+  values:
+    nginx.conf: '
+    events {
+    }
+    http {
+      server {
+          listen 80;
+          location / {
+              return 200 "Hello world!";
+          }
+      }
+    }
+  '
+
+secrets: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.org/client-max-body-size: 0
+  hosts:
+    - host: hama-kube-test.info
+      paths:
+        - path: /
+          pathType: prefix
+
+# Additional volumes on the output Deployment definition.
+volumes: 
+  - name: config-vol
+    configMap:
+      name: nginx-config
+      items:
+        - key: nginx.conf
+          path: nginx.conf
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts:
+  - name: config-vol
+    mountPath: /etc/nginx
